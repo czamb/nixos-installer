@@ -11,10 +11,20 @@
 # Find possile locals
 LOCALS=$(find "$(nix-build '<nixpkgs>' --no-out-link -A kbd)/share/keymaps" -type f -exec basename {} \; | sed 's/.map.gz//')
 
+NUM_LOCALS=$( echo "$LOCALS" | wc -l)
+
+LOCAL_OPT=""
+for i in $LOCALS; do
+    LOCAL_OPT="$LOCAL_OPT $i \"\" off"
+done
+
+echo "$LOCAL_OPT"
+echo "Num locals: $NUM_LOCALS"
+
 # Duplicate file descriptor 1 on descriptor 3
 exec 3>&1
 
 #test
-result=$(dialog --title "INPUT BOX"   --clear    --inputbox "Username" 16 51 2>&1 1>&3)
+result=$(dialog --title "Select Language" --clear --radiolist "Choose keyboard lang:" 100 300 "$NUM_LOCALS" $LOCAL_OPT 2>&1 1>&3)
 
 echo "Result: $result"
