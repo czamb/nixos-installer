@@ -1,6 +1,10 @@
-import <nixpkgs/nixos/tests/make-test.nix> ({ ... }: let
+import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ... }: let
 
+  test = pkgs.writeScript "test" ''
+  #!/bin/sh
+  echo "Done!"
 
+  '';
 
 in {
   name = "nixos-installer";
@@ -24,7 +28,8 @@ in {
 
   testScript =
     ''
-      # $machine->succeed("${../nixos-installer.sh}");
+      $machine->succeed("echo 'test'");
+      $machine->succeed(${../nixos-installer.sh});
     '';
 
 })
