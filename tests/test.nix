@@ -20,6 +20,8 @@ in {
 
       environment.systemPackages = with pkgs; [
         dialog
+        fzf
+        findutils
         (writeScriptBin "nixos-installer" ../nixos-installer.sh)
       ];
 
