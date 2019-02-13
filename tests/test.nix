@@ -7,7 +7,7 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ... }: let
   '';
 
 in {
-  name = "nixos-installer";
+  name = "nixos-installer2";
 
   machine =
     { config, pkgs, ... }:
@@ -24,6 +24,8 @@ in {
         findutils
         (writeScriptBin "nixos-installer" ../nixos-installer.sh)
       ];
+
+      virtualisation.writableStore = true;
 
       virtualisation.emptyDiskImages = [ 512 ];
     };

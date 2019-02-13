@@ -32,6 +32,6 @@ echo "Num locals: $NUM_LOCALS"
 # Duplicate file descriptor 1 on descriptor 3
 exec 3>&1
 
-result=$($DIALOG --title "Select Language" --radiolist "Choose keyboard lang:" 0 0 "$NUM_LOCALS" $LOCAL_OPT 2>&1 1>&3)
+result=$($DIALOG --title "Select Layout" --radiolist "Choose keyboard layout:" 0 0 "$NUM_LOCALS" $LOCAL_OPT 2>&1 1>&3)
 
 echo "Result: $result"
