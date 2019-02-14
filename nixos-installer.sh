@@ -34,7 +34,10 @@ exec 3>&1
 result=$($DIALOG --title "Select Layout" --radiolist "Choose keyboard layout:" 0 0 "$NUM_LOCALS" $LOCAL_OPT 2>&1 1>&3)
 
 
-if [ "$result" != "default" ]; then
+if [ "$result" = "default" ]; then
+    echo "Loadkeys -d"
+    loadkeys -d
+else
     echo "Loadkeys: $result"
     loadkeys "$result"
 fi
