@@ -10,6 +10,32 @@ set -e
 : "${DIALOG_ITEM_HELP=4}"
 : "${DIALOG_ESC=255}"
 
+
+# Global Variables
+NIX_CONFIG=$(mktemp)
+
+cleanup(){
+
+    echo "Cleanup..."
+    rm "$NIX_CONFIG"
+
+}
+
+trap cleanup EXIT
+
+echo "Nix config file: $NIX_CONFIG"
+
+cat << EOF >> "$NIX_CONFIG"
+{ pkgs, ... }:
+let
+  disko = (builtins.fetchGit {
+    url = https://cgit.lassul.us/disko/;
+    rev = "88f56a0b644dd7bfa8438409bea5377adef6aef4";
+  }) + "/lib";
+EOF
+
+cat "$NIX_CONFIG"
+
 # Find possile locals
 LOCALS=$(find "$(nix-build '<nixpkgs>' --no-out-link -A kbd)/share/keymaps" -type f -exec basename {} \; | sed 's/.map.gz//' | sort)
 
@@ -41,5 +67,9 @@ else
     echo "Loadkeys: $result"
     loadkeys "$result"
 fi
+
+
+
+
 
 
