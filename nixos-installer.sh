@@ -17,21 +17,26 @@ NUM_LOCALS=$( echo "$LOCALS" | wc -l)
 
 DIALOG="dialog"
 
+# Convert keyboard layout list to dialog readable list
 LOCAL_OPT=""
 for i in $LOCALS; do
-
-    if [ "$i" = "en" ]; then
-        LOCAL_OPT="$LOCAL_OPT $i - on "
-    else
-        LOCAL_OPT="$LOCAL_OPT $i - off "
-    fi
+    LOCAL_OPT="$LOCAL_OPT $i - off "
 done
+
+LOCAL_OPT="default - on $LOCAL_OPT"
 
 echo "Num locals: $NUM_LOCALS"
 
 # Duplicate file descriptor 1 on descriptor 3
 exec 3>&1
 
+# Select keyboard layout screen
 result=$($DIALOG --title "Select Layout" --radiolist "Choose keyboard layout:" 0 0 "$NUM_LOCALS" $LOCAL_OPT 2>&1 1>&3)
 
-echo "Result: $result"
+
+if [ "$result" != "default" ]; then
+    echo "Loadkeys: $result"
+    loadkeys "$result"
+fi
+
+
